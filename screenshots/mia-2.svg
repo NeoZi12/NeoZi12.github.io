@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#0d0208"/>
+  <rect x="50" y="50" width="1820" height="980" fill="none" stroke="#00ff41" stroke-width="3"/>
+  <text x="960" y="300" font-family="Courier New, monospace" font-size="140" fill="#00ff41" text-anchor="middle" font-weight="300">MIA</text>
+  <text x="960" y="720" font-family="Courier New, monospace" font-size="48" fill="#00cc33" text-anchor="middle">Appointment Management</text>
+  <text x="960" y="800" font-family="Courier New, monospace" font-size="28" fill="#00cc33" text-anchor="middle" opacity="0.6">[ Screenshot 2 of 3 ]</text>
+  <rect x="450" y="420" width="480" height="220" fill="none" stroke="#00cc33" stroke-width="2" opacity="0.6" rx="10"/>
+  <rect x="990" y="420" width="480" height="220" fill="none" stroke="#00cc33" stroke-width="2" opacity="0.6" rx="10"/>
+</svg>
