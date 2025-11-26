@@ -140,6 +140,21 @@
             text-shadow: 0 0 5px #00FF41;
         }
 
+        .typing-cursor::after {
+            content: '|';
+            color: #00FF41;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hidden-initial {
+            opacity: 0;
+        }
+
         .right-section {
             flex: 1;
             display: flex;
@@ -284,11 +299,9 @@
 
     <div class="container">
         <div class="left-section">
-            <h1 class="welcome-text">Welcome.</h1>
-            <div class="accent-line"></div>
-            <p class="intro-text">
-                I'm <span class="highlight">Neo</span>, a practical software engineer who loves building things — from full-stack web apps to AI-powered tools. I'm passionate about clean code, smart systems, and turning ideas into real products.
-            </p>
+            <h1 class="welcome-text" id="welcome-text"></h1>
+            <div class="accent-line hidden-initial" id="accent-line"></div>
+            <p class="intro-text" id="intro-text"></p>
         </div>
 
         <div class="right-section">
@@ -348,6 +361,62 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        });
+
+        // Typing Effect
+        const welcomeText = "Welcome.";
+        const introText = "I'm <span class='highlight'>Neo</span>, a practical software engineer who loves building things — from full-stack web apps to AI-powered tools. I'm passionate about clean code, smart systems, and turning ideas into real products.";
+
+        const welcomeElement = document.getElementById('welcome-text');
+        const introElement = document.getElementById('intro-text');
+        const accentLine = document.getElementById('accent-line');
+
+        let welcomeIndex = 0;
+        let introIndex = 0;
+        let isTypingWelcome = true;
+        let isTypingIntro = false;
+
+        function typeWelcome() {
+            if (welcomeIndex < welcomeText.length) {
+                welcomeElement.textContent += welcomeText.charAt(welcomeIndex);
+                welcomeIndex++;
+                setTimeout(typeWelcome, 100);
+            } else {
+                welcomeElement.classList.remove('typing-cursor');
+                accentLine.classList.remove('hidden-initial');
+                setTimeout(() => {
+                    isTypingIntro = true;
+                    introElement.classList.add('typing-cursor');
+                    typeIntro();
+                }, 300);
+            }
+        }
+
+        function typeIntro() {
+            if (introIndex < introText.length) {
+                const char = introText.charAt(introIndex);
+
+                // Handle HTML tags
+                if (char === '<') {
+                    const tagEnd = introText.indexOf('>', introIndex);
+                    const tag = introText.substring(introIndex, tagEnd + 1);
+                    introElement.innerHTML += tag;
+                    introIndex = tagEnd + 1;
+                } else {
+                    introElement.innerHTML += char;
+                    introIndex++;
+                }
+
+                setTimeout(typeIntro, 30);
+            } else {
+                introElement.classList.remove('typing-cursor');
+            }
+        }
+
+        // Start typing animation on page load
+        window.addEventListener('load', () => {
+            welcomeElement.classList.add('typing-cursor');
+            setTimeout(typeWelcome, 500);
         });
     </script>
 </body>
