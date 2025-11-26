@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neo Zino - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            background-color: #0d0208;
+            color: #00FF41;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .border-accent {
+            position: fixed;
+            background: linear-gradient(135deg, #00FF41 0%, #00CC33 50%, #00FF41 100%);
+            z-index: 1000;
+        }
+
+        .border-left {
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+        }
+
+        .border-top {
+            top: 0;
+            left: 0;
+            width: 15%;
+            height: 8px;
+        }
+
+        .border-bottom {
+            bottom: 0;
+            right: 0;
+            width: 20%;
+            height: 8px;
+        }
+
+        .border-right {
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 15%;
+        }
+
+        .logo {
+            position: absolute;
+            top: 2rem;
+            left: 3rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00FF41;
+            z-index: 10;
+            text-shadow: 0 0 10px #00FF41;
+        }
+
+        .social-links {
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            display: flex;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+
+        .social-links a {
+            color: #00CC33;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #00FF41;
+            filter: drop-shadow(0 0 8px #00FF41);
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 6rem;
+            gap: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-section {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .welcome-text {
+            font-size: 5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+            color: #00FF41;
+            text-shadow: 0 0 20px #00FF41;
+        }
+
+        .accent-line {
+            width: 60px;
+            height: 3px;
+            background-color: #00FF41;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 10px #00FF41;
+        }
+
+        .intro-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #00CC33;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            color: #00FF41;
+            text-shadow: 0 0 5px #00FF41;
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .projects-box {
+            background-color: rgba(0, 20, 0, 0.8);
+            padding: 3rem;
+            border-radius: 8px;
+            min-width: 300px;
+            border: 1px solid #00FF41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .projects-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            color: #00FF41;
+            text-shadow: 0 0 10px #00FF41;
+        }
+
+        .project-list {
+            list-style: none;
+        }
+
+        .project-list li {
+            margin-bottom: 1.5rem;
+        }
+
+        .project-link {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #00CC33;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            border-left: 3px solid transparent;
+            padding-left: 1rem;
+        }
+
+        .project-link:hover {
+            color: #00FF41;
+            border-left-color: #00FF41;
+            transform: translateX(10px);
+            text-shadow: 0 0 8px #00FF41;
+        }
+
+        .project-link::before {
+            content: '> ';
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-link:hover::before {
+            opacity: 1;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            color: #00CC33;
+            font-size: 0.875rem;
+            z-index: 10;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                padding: 4rem 3rem;
+            }
+
+            .welcome-text {
+                font-size: 3.5rem;
+            }
+
+            .logo {
+                left: 2rem;
+            }
+
+            .social-links {
+                right: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 3rem 2rem;
+            }
+
+            .welcome-text {
+                font-size: 2.5rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+                left: 1.5rem;
+                top: 1.5rem;
+            }
+
+            .social-links {
+                right: 1.5rem;
+                top: 1.5rem;
+            }
+
+            .projects-box {
+                padding: 2rem;
+            }
+
+            footer {
+                right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="border-accent border-left"></div>
+    <div class="border-accent border-top"></div>
+    <div class="border-accent border-bottom"></div>
+    <div class="border-accent border-right"></div>
+
+    <div class="logo">NZ</div>
+
+    <div class="social-links">
+        <a href="https://github.com/neozino" target="_blank" title="GitHub">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+        <a href="https://linkedin.com/in/neozino" target="_blank" title="LinkedIn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="left-section">
+            <h1 class="welcome-text">Welcome.</h1>
+            <div class="accent-line"></div>
+            <p class="intro-text">
+                My name is <span class="highlight">Neo Zino</span>. I'm passionate about creating
+                beautiful and functional digital experiences.
+            </p>
+            <p class="intro-text">
+                Explore my work to see projects that showcase my skills and creativity.
+            </p>
+        </div>
+
+        <div class="right-section">
+            <div class="projects-box">
+                <h2 class="projects-title">Projects</h2>
+                <ul class="project-list">
+                    <li><a href="#" class="project-link" target="_blank">Jobizz</a></li>
+                    <li><a href="#" class="project-link" target="_blank">Mia: Tax Consultant</a></li>
+                    <li><a href="#" class="project-link" target="_blank">Eventy</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>©2025 Neo Zino</footer>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Matrix characters - Katakana, Latin letters, and numbers
+        const matrixChars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const characters = matrixChars.split('');
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(13, 2, 8, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00FF41';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
