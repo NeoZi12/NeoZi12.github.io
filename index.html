@@ -380,7 +380,7 @@
             if (welcomeIndex < welcomeText.length) {
                 welcomeElement.textContent += welcomeText.charAt(welcomeIndex);
                 welcomeIndex++;
-                setTimeout(typeWelcome, 100);
+                setTimeout(typeWelcome, 60);
             } else {
                 welcomeElement.classList.remove('typing-cursor');
                 accentLine.classList.remove('hidden-initial');
@@ -407,10 +407,9 @@
                     introIndex++;
                 }
 
-                setTimeout(typeIntro, 30);
-            } else {
-                introElement.classList.remove('typing-cursor');
+                setTimeout(typeIntro, 20);
             }
+            // Keep cursor visible at the end
         }
 
         // Start typing animation on page load
