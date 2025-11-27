@@ -150,26 +150,31 @@ function initializeNavHighlighting() {
   const sections = document.querySelectorAll('.project-section, #hero');
   const navLinks = document.querySelectorAll('.nav-link');
 
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '-100px 0px -80px 0px'
-  };
+  window.addEventListener('scroll', () => {
+    let current = '';
+    const navHeight = 120; // Account for fixed nav bar
 
-  const observerCallback = (entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const sectionId = entry.target.id;
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      const scrollPosition = window.pageYOffset;
 
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${sectionId}`) {
-            link.classList.add('active');
-          }
-        });
+      // Check if we're in this section
+      if (scrollPosition >= sectionTop - navHeight - 50 &&
+          scrollPosition < sectionTop + sectionHeight - navHeight) {
+        current = section.getAttribute('id');
       }
     });
-  };
 
-  const sectionObserver = new IntersectionObserver(observerCallback, observerOptions);
-  sections.forEach(section => sectionObserver.observe(section));
+    // Update active link
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  });
+
+  // Trigger on initial load
+  window.dispatchEvent(new Event('scroll'));
 }

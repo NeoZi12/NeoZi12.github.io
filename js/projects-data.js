@@ -29,22 +29,151 @@ const projectsData = {
     ],
     codeHighlights: [
       {
-        file: "placeholder.js",
+        file: "jobMatching.service.js",
         language: "JavaScript",
-        description: "Code snippet coming soon",
-        code: `// This is a placeholder
-// Your actual code snippet will be added here
-// to showcase interesting implementation details
+        description: "AI-powered job matching engine with parallel processing and multi-factor scoring algorithm",
+        code: `  /**
+   * 🐝 JOBIZZ - AI-POWERED JOB MATCHING ENGINE
+   *
+   * Rate multiple jobs using parallel processing & OpenAI embeddings
+   * Implements sophisticated multi-factor scoring algorithm with concurrency control
+   */
 
-function placeholder() {
-  return "Add your code snippet here";
-}`
+  async function batchRateJobs(userId, jobs) {
+    console.log(\`🐝 Rating \${jobs.length} jobs for user \${userId}...\`);
+
+    // Parallel processing with concurrency limit (prevents API overwhelming)
+    const CONCURRENCY = 5;
+    const ratedJobs = [];
+
+    // Process jobs in batches for optimal performance
+    for (let i = 0; i < jobs.length; i += CONCURRENCY) {
+      const batch = jobs.slice(i, i + CONCURRENCY);
+      const batchNum = Math.floor(i / CONCURRENCY) + 1;
+      const totalBatches = Math.ceil(jobs.length / CONCURRENCY);
+
+      console.log(\`📦 Batch \${batchNum}/\${totalBatches} (\${batch.length} jobs)...\`);
+
+      // 🚀 Process batch concurrently with Promise.all
+      const batchResults = await Promise.all(
+        batch.map(async (job) => {
+          try {
+            // AI-powered scoring with multiple factors
+            const scores = await calculateMatchScore(userId, job);
+
+            // Filter out jobs below minimum threshold
+            if (scores === null) return null;
+
+            return {
+              ...job,
+              ...scores,  // Inject calculated match scores
+            };
+          } catch (error) {
+            console.error(\`Failed to rate job \${job.id}:\`, error.message);
+            return null;
+          }
+        })
+      );
+
+      // Filter out failed ratings and add to results
+      ratedJobs.push(...batchResults.filter(Boolean));
+    }
+
+    // Sort by match score (best matches first)
+    ratedJobs.sort((a, b) => b.match_score - a.match_score);
+
+    console.log(\`✅ Rated \${ratedJobs.length} jobs successfully\`);
+    return ratedJobs;
+  }
+
+  /**
+   * 🧠 MULTI-FACTOR SCORING ALGORITHM
+   *
+   * Weighted scoring system combining:
+   * • Skills Match (35%) - AI-powered semantic matching
+   * • Title Match (25%) - Jaccard similarity + word overlap
+   * • Location (20%) - Distance-based with geocoding
+   * • Preferences (10%) - Job type & remote preference
+   * • AI Similarity (10%) - OpenAI embedding cosine similarity
+   */
+
+  async function calculateMatchScore(userId, job) {
+    // Fetch user profile & preferences
+    const profile = await getUserProfile(userId);
+    const prefs = await getUserPreferences(userId);
+
+    // 1️⃣ AI-Powered Skills Matching (Dynamic synonym detection)
+    const skillsScore = await calculateSkillsMatchDynamic(
+      profile.skills,
+      job.skills_required
+    );
+
+    // 2️⃣ Title Matching (Jaccard similarity algorithm)
+    const titleScore = calculateTitleMatch(
+      prefs.desired_job_title,
+      job.title
+    );
+
+    // 🚫 MINIMUM THRESHOLD: Reject irrelevant jobs early
+    if (skillsScore === 0 && titleScore === 0) {
+      return null;  // No match on core criteria
+    }
+
+    // 3️⃣ Location Scoring (Haversine distance + geocoding)
+    const locationScore = calculateLocationMatchWithDistance(
+      profile.latitude,
+      profile.longitude,
+      job.latitude,
+      job.longitude,
+      job.location,
+      prefs.remote_only
+    );
+
+    // 4️⃣ Preferences (Job type compatibility)
+    const preferencesScore = calculatePreferencesMatch(
+      prefs.job_type,
+      job.job_type,
+      prefs.remote_only,
+      job.location
+    );
+
+    // 5️⃣ AI Embedding Similarity (OpenAI semantic understanding)
+    const profileEmbedding = await getOrGenerateProfileEmbedding(userId);
+    const jobEmbedding = await getOrGenerateJobEmbedding(
+      job.id,
+      job.description,
+      job.title,
+      job.skills_required
+    );
+    const embeddingSimilarity = cosineSimilarity(profileEmbedding, jobEmbedding);
+
+    // 🎯 Calculate weighted overall score
+    const match_score = Math.round(
+      skillsScore * 0.35 +
+      titleScore * 0.25 +
+      locationScore * 0.20 +
+      preferencesScore * 0.10 +
+      embeddingSimilarity * 100 * 0.10
+    );
+
+    return {
+      match_score,
+      skills_match_score: skillsScore,
+      title_match_score: titleScore,
+      location_match_score: locationScore,
+      preferences_match_score: preferencesScore,
+      embedding_similarity: embeddingSimilarity,
+    };
+  }`
       }
     ],
     screenshots: [
-      { src: "screenshots/jobizz-1.svg", alt: "Jobizz Dashboard" },
-      { src: "screenshots/jobizz-2.svg", alt: "Job Search Interface" },
-      { src: "screenshots/jobizz-3.svg", alt: "Application Tracking" }
+      { src: "screenshots/jobizz-1.png", alt: "Job Search Page with Advanced Filters" },
+      { src: "screenshots/jobizz-4.png", alt: "AI-Powered Job Listings with Match Scores" },
+      { src: "screenshots/jobizz-2.png", alt: "Application Tracking Dashboard" },
+      { src: "screenshots/jobizz-5.png", alt: "User Profile with Skills and Preferences" },
+      { src: "screenshots/jobizz-6.png", alt: "CV Upload and Preview Interface" },
+      { src: "screenshots/jobizz-3.png", alt: "Detailed Match Score Breakdown (86% Match)" }
     ],
     links: {
       github: "https://github.com/NeoZi12/Jobizz.git",
@@ -76,22 +205,50 @@ function placeholder() {
     ],
     codeHighlights: [
       {
-        file: "placeholder.js",
+        file: "appointments.js",
         language: "JavaScript",
-        description: "Code snippet coming soon",
-        code: `// This is a placeholder
-// Your actual code snippet will be added here
-// to showcase interesting implementation details
+        description: "Day-to-date conversion logic for weekly appointment slot generation",
+        code: `  // Convert day names to actual dates for the current week
+  Object.keys(slots).forEach((dayKey) => {
+    const times = slots[dayKey];
+    if (times && times.length > 0) {
+      const currDay = today.getDay();  // Current day index (0-6)
+      const dayIndex = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ].indexOf(dayKey);
 
-function placeholder() {
-  return "Add your code snippet here";
-}`
+      // Calculate day offset with wraparound
+      let diff = dayIndex - currDay;
+      if (diff < 0) diff += 7;  // Wrap to next week
+
+      const date = new Date(today);
+      date.setDate(today.getDate() + diff);
+      const dateStr = date.toISOString().slice(0, 10);
+
+      times.forEach((time) => {
+        // Insert slots into database...
+      });
+    }
+  });`
       }
     ],
     screenshots: [
-      { src: "screenshots/mia-1.svg", alt: "Mia Dashboard" },
-      { src: "screenshots/mia-2.svg", alt: "Appointment Management" },
-      { src: "screenshots/mia-3.svg", alt: "Client Notifications" }
+      { src: "screenshots/mia-1.png", alt: "Homepage with Tax Consultant Introduction" },
+      { src: "screenshots/mia-2.png", alt: "Services Overview with Tax Consultation Options" },
+      { src: "screenshots/mia-3.png", alt: "Detailed Licensed Accountant Service Description" },
+      { src: "screenshots/mia-4.png", alt: "Service Selection for Appointment Booking" },
+      { src: "screenshots/mia-5.png", alt: "Interactive Appointment Calendar" },
+      { src: "screenshots/mia-6.png", alt: "Time Slot Selection and Booking Form" },
+      { src: "screenshots/mia-7.png", alt: "Client Personal Area with Appointment Tracking" },
+      { src: "screenshots/mia-8.png", alt: "Document Management and File Upload Sections" },
+      { src: "screenshots/mia-9.png", alt: "Admin Dashboard for Appointment Management" },
+      { src: "screenshots/mia-10.png", alt: "Admin Calendar for Managing Available Time Slots" }
     ],
     links: {
       github: "https://github.com/NeoZi12/MiaWebProject.git",
@@ -101,9 +258,9 @@ function placeholder() {
 
   eventy: {
     number: "PROJECT_03",
-    title: "EventyPro",
+    title: "Eventy",
     tagline: "Modern event management for creators and attendees",
-    description: "EventyPro is a modern full-stack web application that revolutionizes event management. Create and manage events, connect with attendees, and build communities through shared experiences. Features include real-time friend chat, personal statistics dashboards, and comprehensive admin tools for event organizers.",
+    description: "Eventy is a modern full-stack web application that revolutionizes event management. Create and manage events, connect with attendees, and build communities through shared experiences. Features include real-time friend chat, personal statistics dashboards, and comprehensive admin tools for event organizers.",
     techStack: [
       "React",
       "Vite",
@@ -126,25 +283,57 @@ function placeholder() {
     ],
     codeHighlights: [
       {
-        file: "placeholder.js",
+        file: "CityAutocomplete.jsx",
         language: "JavaScript",
-        description: "Code snippet coming soon",
-        code: `// This is a placeholder
-// Your actual code snippet will be added here
-// to showcase interesting implementation details
+        description: "Smart autocomplete component with keyboard navigation and race condition prevention",
+        code: ` export default function CityAutocomplete({ options = [], value = "", onChange }) {
+    const [input, setInput] = useState(value || "");
+    const [open, setOpen] = useState(false);
+    const [hi, setHi] = useState(-1); // highlighted index
 
-function placeholder() {
-  return "Add your code snippet here";
-}`
+    const filtered = useMemo(
+      () => options.filter(o => norm(o).includes(norm(input))).slice(0, 50),
+      [options, input]
+    );
+
+    function handleKeyDown(e) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setHi(i => Math.min((i < 0 ? -1 : i) + 1, filtered.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setHi(i => Math.max((i < 0 ? 0 : i) - 1, 0));
+      } else if (e.key === "Enter" && open && hi >= 0) {
+        e.preventDefault();
+        choose(filtered[hi]);
+      }
+    }
+
+    function handleBlur() {
+      setTimeout(() => {
+        const exists = options.some(o => norm(o) === norm(input));
+        if (!exists) {
+          setInput(value || "");
+          setError("בחר עיר מהרשימה");
+        }
+      }, 120); // Delay prevents blur race condition
+    }
+
+    function handleOptionMouseDown(e, opt) {
+      e.preventDefault(); // Critical: prevents input blur before selection
+      choose(opt);
+    }`
       }
     ],
     screenshots: [
-      { src: "screenshots/eventy-1.svg", alt: "EventyPro Home" },
-      { src: "screenshots/eventy-2.svg", alt: "Event Creation" },
-      { src: "screenshots/eventy-3.svg", alt: "User Dashboard" }
+      { src: "screenshots/eventy-1.png", alt: "Featured Events Page with Search and Map Integration" },
+      { src: "screenshots/eventy-2.png", alt: "Interactive Map with Event Location Markers" },
+      { src: "screenshots/eventy-3.png", alt: "Personal Area with User Profile and Friends Management" },
+      { src: "screenshots/eventy-4.png", alt: "Contact Admin Page with Message History" },
+      { src: "screenshots/eventy-5.png", alt: "Event Detail Page with Participants and Comments" }
     ],
     links: {
-      github: "https://github.com/LeoNet2024/EventyPro.git",
+      github: "https://github.com/LeoNet2024/Eventy.git",
       demo: null
     }
   }
@@ -202,13 +391,13 @@ function createProjectSection(projectKey, data) {
     <div class="project-content">
       <!-- Description -->
       <div class="content-block description-block">
-        <h3 class="block-title"><span class="prompt">> </span>Description</h3>
+        <h3 class="block-title">Description</h3>
         <p class="block-text">${data.description}</p>
       </div>
 
       <!-- Tech Stack -->
       <div class="content-block tech-block">
-        <h3 class="block-title"><span class="prompt">> </span>Tech Stack</h3>
+        <h3 class="block-title">Tech Stack</h3>
         <div class="tech-grid">
           ${data.techStack.map(tech => `
             <span class="tech-badge">${tech}</span>
@@ -218,7 +407,7 @@ function createProjectSection(projectKey, data) {
 
       <!-- Key Features -->
       <div class="content-block features-block">
-        <h3 class="block-title"><span class="prompt">> </span>Key Features</h3>
+        <h3 class="block-title">Key Features</h3>
         <ul class="features-list">
           ${data.features.map(feature => `
             <li class="feature-item">
@@ -231,7 +420,7 @@ function createProjectSection(projectKey, data) {
 
       <!-- Code Highlights -->
       <div class="content-block code-block">
-        <h3 class="block-title"><span class="prompt">> </span>Code Highlights</h3>
+        <h3 class="block-title">Code Highlights</h3>
         <div class="code-snippets">
           ${data.codeHighlights.map(snippet => `
             <div class="code-snippet">
@@ -309,8 +498,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.insertBefore(section, footer);
   });
 
-  // Apply syntax highlighting
-  setTimeout(highlightSyntax, 100);
+  // Apply syntax highlighting (disabled for cleaner code display)
+  // setTimeout(highlightSyntax, 100);
 
   // Initialize carousels after sections are created
   if (typeof initializeCarousels === 'function') {
