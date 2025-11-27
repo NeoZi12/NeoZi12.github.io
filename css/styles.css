@@ -843,6 +843,10 @@ footer {
     font-size: 1.5rem;
   }
 
+  .project-nav {
+    height: 120px;
+  }
+
   .nav-container {
     gap: 1rem;
     justify-content: space-around;
