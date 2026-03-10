@@ -177,7 +177,7 @@ const projectsData = {
     ],
     links: {
       github: "https://github.com/NeoZi12/Jobizz.git",
-      demo: null
+      demo: "https://jobizz-beige.vercel.app"
     }
   },
 
@@ -361,7 +361,18 @@ function createProjectSection(projectKey, data) {
   section.innerHTML = `
     <div class="project-header">
       <div class="project-number">// ${data.number}</div>
-      <h2 class="project-title">${data.title}</h2>
+      <div class="project-title-row">
+        <h2 class="project-title">${data.title}</h2>
+        ${data.links.demo ? `
+          <a href="${data.links.demo}" class="project-btn demo-btn demo-btn-icon" target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        ` : ''}
+      </div>
       <div class="accent-line"></div>
       <p class="project-tagline">${data.tagline}</p>
     </div>
