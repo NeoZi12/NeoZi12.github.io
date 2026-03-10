@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#0d0208"/>
+  <rect x="50" y="50" width="1820" height="980" fill="none" stroke="#00ff41" stroke-width="3"/>
+
+  <!-- Glowing center design -->
+  <circle cx="960" cy="540" r="150" fill="none" stroke="#00ff41" stroke-width="2" opacity="0.3"/>
+  <circle cx="960" cy="540" r="120" fill="none" stroke="#00cc33" stroke-width="2" opacity="0.5"/>
+  <path d="M 920 540 L 960 500 L 1000 540 L 960 580 Z" fill="none" stroke="#00ff41" stroke-width="3"/>
+
+  <text x="960" y="380" font-family="Courier New, monospace" font-size="120" fill="#00ff41" text-anchor="middle" font-weight="300">
+    JOBIZZ
+  </text>
+  <text x="960" y="720" font-family="Courier New, monospace" font-size="48" fill="#00cc33" text-anchor="middle">
+    Dashboard Screenshot
+  </text>
+  <text x="960" y="800" font-family="Courier New, monospace" font-size="28" fill="#00cc33" text-anchor="middle" opacity="0.6">
+    [ Replace with actual screenshot ]
+  </text>
+</svg>
