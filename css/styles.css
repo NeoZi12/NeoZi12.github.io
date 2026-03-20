@@ -104,13 +104,15 @@ body {
 
 /* Hero Section */
 #hero {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   padding: 4rem 6rem;
   gap: 4rem;
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .left-section {
@@ -790,6 +792,53 @@ footer {
   color: #00cc33;
   font-size: 0.875rem;
   z-index: 10;
+}
+
+.freelance-link {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #00cc33;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .freelance-link {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    white-space: normal;
+    margin-top: auto;
+    padding-bottom: 1.5rem;
+    font-size: 0.85rem;
+    width: 100%;
+  }
+}
+
+.freelance-link p {
+  margin-bottom: 0.75rem;
+}
+
+.freelance-btn {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #00cc33;
+  color: #00cc33;
+  font-size: 0.95rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: background 0.2s, color 0.2s;
+}
+
+.freelance-btn:hover {
+  background: #00cc33;
+  color: #000;
 }
 
 /* Responsive Design */
